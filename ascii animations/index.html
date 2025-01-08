@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Art</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: black;
+            color: white;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #button-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: black;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            border-bottom: 1px solid white;
+        }
+        #ascii-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: pre;
+            font-size: 12px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="button-container">
+        <button onclick="loadScript('cube.js')">Cube</button>
+        <button onclick="loadScript('heart.js')">Heart</button>
+    </div>
+    <pre id="ascii-container"></pre>
+    <script>
+        let currentScript = null;
+        let currentInterval = null;
+    
+        function loadScript(scriptName) {
+            // Clear any running intervals or animations
+            if (currentInterval) {
+                clearInterval(currentInterval);
+                currentInterval = null;
+            }
+    
+            // Remove existing script if any
+            if (currentScript) {
+                document.body.removeChild(currentScript);
+                currentScript = null;
+            }
+    
+            // Clear the ascii-container
+            const container = document.getElementById('ascii-container');
+            container.textContent = "";
+    
+            // Create and load the new script
+            currentScript = document.createElement('script');
+            currentScript.src = scriptName;
+            currentScript.onload = () => {
+                if (typeof initializeArt === 'function') {
+                    currentInterval = initializeArt(); // Call the specific script's initialization function
+                }
+            };
+            document.body.appendChild(currentScript);
+        }
+    </script>
+    
+</body>
+</html>
